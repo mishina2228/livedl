@@ -1,9 +1,6 @@
 package youtube
 
 import (
-	"fmt"
-	//	"net/http"
-	//	"io/ioutil"
 	"../files"
 	"../gorman"
 	"../httpbase"
@@ -13,6 +10,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"fmt"
 	"html"
 	"os"
 	"os/signal"
