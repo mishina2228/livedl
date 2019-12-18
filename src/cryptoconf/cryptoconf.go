@@ -1,16 +1,16 @@
 package cryptoconf
 
 import (
-	"golang.org/x/crypto/sha3"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"io"
-	"io/ioutil"
-	"os"
 	"encoding/json"
 	"fmt"
+	"golang.org/x/crypto/sha3"
+	"io"
+	"io/ioutil"
 	"log"
+	"os"
 )
 
 func Set(dataSet map[string]string, fileName, pass string) (err error) {

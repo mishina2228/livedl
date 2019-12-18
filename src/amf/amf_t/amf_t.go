@@ -5,9 +5,8 @@ type AMF3 struct {
 }
 
 type SwitchToAmf3 struct {
-
 }
 
 type AMF0EcmaArray struct {
-	Data map[string]interface {}
+	Data map[string]interface{}
 }

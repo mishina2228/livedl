@@ -5,23 +5,23 @@ import (
 )
 
 type GoroutineManager struct {
-	channels map[chan struct{}] struct{}
-	mtxChan sync.Mutex
+	channels map[chan struct{}]struct{}
+	mtxChan  sync.Mutex
 
 	mtxWg sync.Mutex
-	wg sync.WaitGroup
+	wg    sync.WaitGroup
 
 	codeChecker func(code int)
 }
 
 func NewManager() *GoroutineManager {
 	return &GoroutineManager{
-		channels: map[chan struct{}] struct{}{},
+		channels: map[chan struct{}]struct{}{},
 	}
 }
 func WithChecker(f func(int)) *GoroutineManager {
 	return &GoroutineManager{
-		channels: map[chan struct{}] struct{}{},
+		channels:    map[chan struct{}]struct{}{},
 		codeChecker: f,
 	}
 }
@@ -53,7 +53,7 @@ func (gm *GoroutineManager) Go(f func(<-chan struct{}) int) {
 	stopChan := make(chan struct{}, 1)
 	gm.addChan(stopChan)
 
-	go func(){
+	go func() {
 		defer gm.wg.Done()
 		code := f(stopChan)
 		gm.delChan(stopChan)

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 	"regexp"
+	"strings"
 )
 
 func RemoveExtention(fileName string) string {
@@ -38,7 +38,7 @@ func GetFileNameNext(name string) (fileName string, err error) {
 		base := strings.TrimSuffix(fileName, ext)
 
 		var i int
-		for i = 2; i < 10000000 ; i++ {
+		for i = 2; i < 10000000; i++ {
 			fileName = fmt.Sprintf("%s-%d%s", base, i, ext)
 			_, test := os.Stat(fileName)
 			if test != nil {

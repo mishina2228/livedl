@@ -1,10 +1,10 @@
 package niconico
 
 import (
-	"fmt"
-	"time"
-	"os"
 	"database/sql"
+	"fmt"
+	"os"
+	"time"
 )
 
 func (hls *NicoHls) memdbOpen() (err error) {
@@ -44,7 +44,7 @@ func (hls *NicoHls) memdbOpen() (err error) {
 			} else {
 				hls.memdbSet200(seqno)
 			}
-			if (! found404) {
+			if !found404 {
 				hls.memdbSetStopBack(seqno)
 				if hls.nicoDebug {
 					fmt.Fprintf(os.Stderr, "memdbSetStopBack(%d)\n", seqno)

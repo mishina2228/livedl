@@ -2,9 +2,9 @@ package amf3
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"log"
-	"fmt"
 )
 
 func decodeU29(rdr *bytes.Reader) (res int, err error) {
@@ -23,14 +23,14 @@ func decodeU29(rdr *bytes.Reader) (res int, err error) {
 		}
 
 		switch i {
-			case 0:
-				res = int(val)
-			case 3:
-				res = (res << 8) | int(val)
-			default:
-				res = (res << 7) | int(val)
+		case 0:
+			res = int(val)
+		case 3:
+			res = (res << 8) | int(val)
+		default:
+			res = (res << 7) | int(val)
 		}
-		if (! flg) {
+		if !flg {
 			break
 		}
 	}
@@ -48,7 +48,7 @@ func decodeString(rdr *bytes.Reader) (str string, err error) {
 	flag := (u29 & 1) != 0
 	len := u29 >> 1
 
-	if (! flag) {
+	if !flag {
 		// string reference table index
 		log.Fatalf("[FIXME] not implemented: UTF-8-vr = U29S-ref")
 	} else {
@@ -84,42 +84,42 @@ func decodeOne(rdr *bytes.Reader) (res interface{}, err error) {
 		return
 	}
 	switch format {
-		case 6: // string-marker
-			res, err = decodeString(rdr)
-			if err != nil {
-				return
-			}
-		case 9: // array-marker
+	case 6: // string-marker
+		res, err = decodeString(rdr)
+		if err != nil {
+			return
+		}
+	case 9: // array-marker
 		// array-marker U29O-ref
 		// # array-marker U29A-value (UTF-8-empty | * (assoc-value) UTF-8-empty) * (value-type)
 		// array-marker U29A-value * (assoc-value) UTF-8-empty * (value-type)
 		// array-marker U29A-value UTF-8-empty * (value-type)
-			u29, _ := decodeU29(rdr)
-			flag := u29 & 1 != 0
-			count := u29 >> 1
-			if (! flag) {
-				log.Fatalf("[FIXME] not implemented: array-type = array-marker U29O-ref")
-			}
-			if count == 0 { // [FIXME] condition OK?
-				// associative, terminated by empty string
-				assoc := make(map[string]interface{})
-				for {
-					k, v, e := assocOrUtf8Empty(rdr)
-					if e != nil {
-						//fmt.Printf("## amf3 associative: %+v\n", e)
-						err = e
-						return
-					}
-					if k == "" {
-						break
-					}
-					assoc[k] = v
-					//log.Printf("AMF3 array: %v = %v", k, v)
+		u29, _ := decodeU29(rdr)
+		flag := u29&1 != 0
+		count := u29 >> 1
+		if !flag {
+			log.Fatalf("[FIXME] not implemented: array-type = array-marker U29O-ref")
+		}
+		if count == 0 { // [FIXME] condition OK?
+			// associative, terminated by empty string
+			assoc := make(map[string]interface{})
+			for {
+				k, v, e := assocOrUtf8Empty(rdr)
+				if e != nil {
+					//fmt.Printf("## amf3 associative: %+v\n", e)
+					err = e
+					return
 				}
-				res = assoc
+				if k == "" {
+					break
+				}
+				assoc[k] = v
+				//log.Printf("AMF3 array: %v = %v", k, v)
 			}
-			//log.Fatalf("AMF3 array: len: %d", count)
-		default:
+			res = assoc
+		}
+		//log.Fatalf("AMF3 array: len: %d", count)
+	default:
 		log.Printf("%v\n", res)
 		log.Fatalf("Not implemented: %d", format)
 	}
@@ -138,40 +138,39 @@ func DecodeAll(rdr *bytes.Reader) (res []interface{}, err error) {
 	return
 }
 
-
 func encodeU29(num int, buff *bytes.Buffer) (err error) {
-	if (0 <= num && num <= 0x7f) {
-		if err = buff.WriteByte( byte(num & 0x7f) ); err != nil {
+	if 0 <= num && num <= 0x7f {
+		if err = buff.WriteByte(byte(num & 0x7f)); err != nil {
 			return
 		}
-	} else if (0x80 <= num && num <= 0x3fff) {
-		if err = buff.WriteByte( byte(0x80 | ((num >> 7) & 0x7f)) ); err != nil {
+	} else if 0x80 <= num && num <= 0x3fff {
+		if err = buff.WriteByte(byte(0x80 | ((num >> 7) & 0x7f))); err != nil {
 			return
 		}
-		if err = buff.WriteByte( byte(num & 0x7f) ); err != nil {
+		if err = buff.WriteByte(byte(num & 0x7f)); err != nil {
 			return
 		}
-	} else if (0x4000 <= num && num <= 0x1fffff) {
-		if err = buff.WriteByte( byte(0x80 | ((num >> 14) & 0x7f)) ); err != nil {
+	} else if 0x4000 <= num && num <= 0x1fffff {
+		if err = buff.WriteByte(byte(0x80 | ((num >> 14) & 0x7f))); err != nil {
 			return
 		}
-		if err = buff.WriteByte( byte(0x80 | ((num >> 7) & 0x7f)) ); err != nil {
+		if err = buff.WriteByte(byte(0x80 | ((num >> 7) & 0x7f))); err != nil {
 			return
 		}
-		if err = buff.WriteByte( byte(num & 0x7f) ); err != nil {
+		if err = buff.WriteByte(byte(num & 0x7f)); err != nil {
 			return
 		}
-	} else if (0x200000 <= num && num <= 0x3fffffff) {
-		if err = buff.WriteByte( byte(0x80 | ((num >> 22) & 0x7f)) ); err != nil {
+	} else if 0x200000 <= num && num <= 0x3fffffff {
+		if err = buff.WriteByte(byte(0x80 | ((num >> 22) & 0x7f))); err != nil {
 			return
 		}
-		if err = buff.WriteByte( byte(0x80 | ((num >> 15) & 0x7f)) ); err != nil {
+		if err = buff.WriteByte(byte(0x80 | ((num >> 15) & 0x7f))); err != nil {
 			return
 		}
-		if err = buff.WriteByte( byte(0x80 | ((num >> 7) & 0x7f)) ); err != nil {
+		if err = buff.WriteByte(byte(0x80 | ((num >> 7) & 0x7f))); err != nil {
 			return
 		}
-		if err = buff.WriteByte( byte(num & 0xff) ); err != nil {
+		if err = buff.WriteByte(byte(num & 0xff)); err != nil {
 			return
 		}
 	} else {
@@ -189,8 +188,7 @@ func encodeU28Flag(num int, flag bool, buff *bytes.Buffer) (err error) {
 	return
 }
 
-
-func encodeArray(data []interface {}, buff *bytes.Buffer) (err error) {
+func encodeArray(data []interface{}, buff *bytes.Buffer) (err error) {
 	// array-marker
 	if err = buff.WriteByte(9); err != nil {
 		return
@@ -235,12 +233,12 @@ func encodeString(data string, buff *bytes.Buffer) (err error) {
 
 func encode(data interface{}, buff *bytes.Buffer) (err error) {
 	switch data.(type) {
-		case string:
-			err = encodeString(data.(string), buff)
-		case []string:
-			err = encodeStringArray(data.([]string), buff)
-		default:
-			log.Fatalf("amf0/encode %#v", data)
+	case string:
+		err = encodeString(data.(string), buff)
+	case []string:
+		err = encodeStringArray(data.([]string), buff)
+	default:
+		log.Fatalf("amf0/encode %#v", data)
 	}
 	return
 }

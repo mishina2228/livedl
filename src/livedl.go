@@ -1,18 +1,18 @@
 package main
 
 import (
+	"./httpbase"
+	"./niconico"
+	"./options"
+	"./twitcas"
+	"./youtube"
+	"./zip2mp4"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
-	"./options"
-	"./twitcas"
-	"./niconico"
-	"./youtube"
-	"./zip2mp4"
-	"time"
 	"strings"
-	"./httpbase"
+	"time"
 )
 
 func main() {
@@ -87,7 +87,7 @@ func main() {
 			if dbLocked {
 				break
 			}
-			if (! opt.TcasRetry) {
+			if !opt.TcasRetry {
 				break
 			}
 
@@ -109,7 +109,7 @@ func main() {
 					}
 
 					if minutes > 0 {
-						if delta > int64(minutes * 60) {
+						if delta > int64(minutes*60) {
 							break
 						}
 					}
@@ -134,7 +134,7 @@ func main() {
 		}
 
 	case "NICOLIVE":
-		hlsPlaylistEnd, dbname, err := niconico.Record(opt);
+		hlsPlaylistEnd, dbname, err := niconico.Record(opt)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -186,7 +186,6 @@ func main() {
 			}
 		}
 	}
-
 
 	return
 }

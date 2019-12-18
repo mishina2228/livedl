@@ -2,8 +2,8 @@ package procs
 
 import (
 	"fmt"
-	"runtime"
 	"log"
+	"runtime"
 
 	"./base"
 )
@@ -24,4 +24,3 @@ func Kill(pid int) {
 		log.Fatalf("[FIXME] Kill for %v not supported", runtime.GOOS)
 	}
 }
-

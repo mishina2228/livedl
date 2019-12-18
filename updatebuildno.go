@@ -1,13 +1,13 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
-	"io/ioutil"
-	"time"
-	"strconv"
 	"regexp"
-	"fmt"
+	"strconv"
+	"time"
 )
 
 func main() {

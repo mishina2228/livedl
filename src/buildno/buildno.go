@@ -1,4 +1,3 @@
-
 package buildno
 
 var BuildDate = "20181215"

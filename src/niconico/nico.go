@@ -1,24 +1,23 @@
-
 package niconico
 
 import (
-	"fmt"
-	"net/http"
-	"net/url"
-	"strings"
-	"../options"
-	"io/ioutil"
-	"regexp"
-	"strconv"
-	"os"
-	"net"
-	"encoding/xml"
-	"bufio"
-	"os/signal"
-	"syscall"
-	"runtime"
-	_ "net/http/pprof"
 	"../httpbase"
+	"../options"
+	"bufio"
+	"encoding/xml"
+	"fmt"
+	"io/ioutil"
+	"net"
+	"net/http"
+	_ "net/http/pprof"
+	"net/url"
+	"os"
+	"os/signal"
+	"regexp"
+	"runtime"
+	"strconv"
+	"strings"
+	"syscall"
 )
 
 func NicoLogin(opt options.Option) (err error) {
@@ -67,7 +66,7 @@ func Record(opt options.Option) (hlsPlaylistEnd bool, dbName string, err error) 
 			_, _, opt.NicoSession, _ = options.LoadNicoAccount(opt.NicoLoginAlias)
 		}
 
-		if (! opt.NicoRtmpOnly) {
+		if !opt.NicoRtmpOnly {
 			var done bool
 			var notLogin bool
 			var reserved bool
@@ -90,7 +89,7 @@ func Record(opt options.Option) (hlsPlaylistEnd bool, dbName string, err error) 
 			}
 		}
 
-		if (! opt.NicoHlsOnly) {
+		if !opt.NicoHlsOnly {
 			notLogin, e := NicoRecRtmp(opt)
 			if e != nil {
 				err = e
@@ -117,7 +116,6 @@ func TestRun(opt options.Option) (err error) {
 		fmt.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
 
-
 	if false {
 		ch := make(chan os.Signal, 10)
 		signal.Notify(ch, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
@@ -139,7 +137,6 @@ func TestRun(opt options.Option) (err error) {
 		if opt.NicoTestTimeout <= 0 {
 			opt.NicoTestTimeout = 12
 		}
-
 
 		resp, e, nete := httpbase.Get("https://live.nicovideo.jp/api/getalertinfo", nil)
 		if e != nil {
@@ -199,7 +196,7 @@ func TestRun(opt options.Option) (err error) {
 		rdr := bufio.NewReader(conn)
 
 		chLatest := make(chan string, 1000)
-		go func(){
+		go func() {
 			for {
 				s, e := rdr.ReadString(0)
 				if e != nil {
@@ -209,11 +206,12 @@ func TestRun(opt options.Option) (err error) {
 				}
 				//fmt.Println(s)
 				if ma := regexp.MustCompile(`>(\d+),\S+,\S+<`).FindStringSubmatch(s); len(ma) > 0 {
-					L0:for {
+				L0:
+					for {
 						select {
-							case <-chLatest:
-							default:
-								break L0
+						case <-chLatest:
+						default:
+							break L0
 						}
 					}
 					chLatest <- ma[1]
@@ -221,12 +219,13 @@ func TestRun(opt options.Option) (err error) {
 			}
 		}()
 
-		nextId = func() (string) {
-			L1:for {
+		nextId = func() string {
+		L1:
+			for {
 				select {
-					case <-chLatest:
-					default:
-						break L1
+				case <-chLatest:
+				default:
+					break L1
 				}
 			}
 			return <-chLatest
@@ -274,7 +273,7 @@ func TestRun(opt options.Option) (err error) {
 				case "notfound", "closed", "comingsoon", "timeshift_ticket_exhaust":
 				case "deletedbyuser", "deletedbyvisor", "violated":
 				case "usertimeshift", "tsarchive", "require_community_member",
-				     "noauth", "full", "premium_only", "selected-country":
+					"noauth", "full", "premium_only", "selected-country":
 				default:
 					fmt.Fprintf(os.Stderr, "unknown: %s\n", ma[1])
 					return

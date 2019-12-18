@@ -1,15 +1,15 @@
 package log4gui
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 func print(k, v string) {
 	bs, e := json.Marshal(map[string]string{
 		k: v,
 	})
-	if(e != nil) {
+	if e != nil {
 		fmt.Println(e)
 		return
 	}

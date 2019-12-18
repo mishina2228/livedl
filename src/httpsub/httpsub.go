@@ -1,38 +1,38 @@
-
 package httpsub
 
 import (
+	"bytes"
+	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"os"
 	"sync"
-	"log"
-	"io"
-	"fmt"
-	"bytes"
 )
 
 type SubDownloader struct {
-	method string
-	uri string
-	data []byte
-	Header map[string]string
-	RangeSize int64
-	BuffSize int64
-	fileName string
-	file *os.File
+	method        string
+	uri           string
+	data          []byte
+	Header        map[string]string
+	RangeSize     int64
+	BuffSize      int64
+	fileName      string
+	file          *os.File
 	numConcurrent int
-	chRunning chan bool
-	mtx sync.Mutex
-	wg sync.WaitGroup
-	chLength chan int64
+	chRunning     chan bool
+	mtx           sync.Mutex
+	wg            sync.WaitGroup
+	chLength      chan int64
 }
+
 func (sub *SubDownloader) Concurrent(c int) {
 	sub.numConcurrent = c
 }
 func Get(uri, fileName string) (sub *SubDownloader) {
 	sub = &SubDownloader{
-		method: "GET",
-		uri: uri,
+		method:   "GET",
+		uri:      uri,
 		fileName: fileName,
 	}
 	return
@@ -78,7 +78,7 @@ func (sub *SubDownloader) subrange(pos int64) {
 		}()
 		data := bytes.NewBuffer(sub.data)
 		req, _ := http.NewRequest(sub.method, sub.uri, data)
-		req.Header.Set("Range", fmt.Sprintf("bytes=%d-%d", pos, pos + sub.RangeSize - 1))
+		req.Header.Set("Range", fmt.Sprintf("bytes=%d-%d", pos, pos+sub.RangeSize-1))
 
 		client := new(http.Client)
 		resp, err := client.Do(req)
@@ -100,7 +100,7 @@ func (sub *SubDownloader) subrange(pos int64) {
 			n, _ := io.CopyN(buff, resp.Body, sub.BuffSize)
 			//fmt.Printf("buff size is %d\n", buff.Len())
 			if n > 0 {
-				sub.write(pos + wbytes, buff)
+				sub.write(pos+wbytes, buff)
 				wbytes += n
 			} else {
 				return
@@ -113,18 +113,18 @@ func (sub *SubDownloader) Wait() {
 	sub.chLength = make(chan int64, 10)
 
 	if sub.RangeSize <= 0 {
-		sub.RangeSize = 10*1000*1000
+		sub.RangeSize = 10 * 1000 * 1000
 	}
 
 	if sub.BuffSize <= 0 {
-		sub.BuffSize = 3*1000*1000
+		sub.BuffSize = 3 * 1000 * 1000
 	}
 
 	pos := int64(0)
 	for {
 		sub.subrange(pos)
 		length := <-sub.chLength
-		fmt.Printf("Downloading %v: %v-%v\n", sub.fileName, pos, pos + length - 1)
+		fmt.Printf("Downloading %v: %v-%v\n", sub.fileName, pos, pos+length-1)
 		if length == sub.RangeSize {
 			pos += length
 		} else {

@@ -1,9 +1,8 @@
-
 package objs
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 func PrintAsJson(data interface{}) {
@@ -13,7 +12,7 @@ func PrintAsJson(data interface{}) {
 	}
 	fmt.Println(string(json))
 }
-func Find(intf interface{}, keylist... string) (res interface{}, ok bool) {
+func Find(intf interface{}, keylist ...string) (res interface{}, ok bool) {
 	res = intf
 	if len(keylist) == 0 {
 		ok = true
@@ -25,7 +24,7 @@ func Find(intf interface{}, keylist... string) (res interface{}, ok bool) {
 		switch res.(type) {
 		case map[string]interface{}:
 			res, test = res.(map[string]interface{})[k]
-			if (! test) {
+			if !test {
 				ok = false
 				return
 			}
@@ -43,7 +42,7 @@ func Find(intf interface{}, keylist... string) (res interface{}, ok bool) {
 	ok = true
 	return
 }
-func FindFloat64(intf interface{}, keylist... string) (res float64, ok bool) {
+func FindFloat64(intf interface{}, keylist ...string) (res float64, ok bool) {
 	val, ok := Find(intf, keylist...)
 	if !ok {
 		return
@@ -51,7 +50,7 @@ func FindFloat64(intf interface{}, keylist... string) (res float64, ok bool) {
 	res, ok = val.(float64)
 	return
 }
-func FindString(intf interface{}, keylist... string) (res string, ok bool) {
+func FindString(intf interface{}, keylist ...string) (res string, ok bool) {
 	val, ok := Find(intf, keylist...)
 	if !ok {
 		return
@@ -59,7 +58,7 @@ func FindString(intf interface{}, keylist... string) (res string, ok bool) {
 	res, ok = val.(string)
 	return
 }
-func FindBool(intf interface{}, keylist... string) (res bool, ok bool) {
+func FindBool(intf interface{}, keylist ...string) (res bool, ok bool) {
 	val, ok := Find(intf, keylist...)
 	if !ok {
 		return
@@ -67,7 +66,7 @@ func FindBool(intf interface{}, keylist... string) (res bool, ok bool) {
 	res, ok = val.(bool)
 	return
 }
-func FindArray(intf interface{}, keylist... string) (res []interface{}, ok bool) {
+func FindArray(intf interface{}, keylist ...string) (res []interface{}, ok bool) {
 	val, ok := Find(intf, keylist...)
 	if !ok {
 		return
@@ -75,4 +74,3 @@ func FindArray(intf interface{}, keylist... string) (res []interface{}, ok bool)
 	res, ok = val.([]interface{})
 	return
 }
-

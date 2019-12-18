@@ -1,4 +1,3 @@
-
 package defines
 
 var Twitter = "@himananiito"

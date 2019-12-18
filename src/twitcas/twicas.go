@@ -1,22 +1,22 @@
 package twitcas
 
 import (
+	"../files"
+	"../httpbase"
+	"../procs/ffmpeg"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/gorilla/websocket"
+	_ "github.com/mattn/go-sqlite3"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
-	"time"
-	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
-	"github.com/gorilla/websocket"
-	"../files"
-	"../httpbase"
-	"../procs/ffmpeg"
 	"os/exec"
-	"io"
+	"time"
 )
 
 type Twitcas struct {
@@ -82,10 +82,10 @@ func getStream(user, proxy string) (conn *websocket.Conn, movieId uint64, err er
 			Live bool   `json:"live"`
 		} `json:"movie"`
 		Fmp4 struct {
-			Host   string `json:"host"`
-			Proto  string `json:"proto"`
-			Source bool   `json:"source"`
-			MobileSource bool `json:"mobilesource"`
+			Host         string `json:"host"`
+			Proto        string `json:"proto"`
+			Source       bool   `json:"source"`
+			MobileSource bool   `json:"mobilesource"`
 		} `json:"fmp4"`
 	}
 

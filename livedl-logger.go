@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"bufio"
-	"regexp"
-	"sync"
+	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
+	"sync"
 )
 
 func main() {
