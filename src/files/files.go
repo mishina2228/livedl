@@ -8,12 +8,12 @@ import (
 	"strings"
 )
 
-func RemoveExtention(fileName string) string {
+func RemoveExtension(fileName string) string {
 	e := filepath.Ext(fileName)
 	base := strings.TrimSuffix(fileName, e)
 	return base
 }
-func ChangeExtention(fileName, ext string) string {
+func ChangeExtension(fileName, ext string) string {
 	e := filepath.Ext(fileName)
 	base := strings.TrimSuffix(fileName, e)
 	return base + "." + ext

@@ -21,7 +21,7 @@ import (
 
 func getComment(gm *gorman.GoroutineManager, ctx context.Context, sig <-chan struct{}, isReplay bool, continuation, name string) (done bool) {
 
-	dbName := files.ChangeExtention(name, "yt.sqlite3")
+	dbName := files.ChangeExtension(name, "yt.sqlite3")
 	db, err := dbOpen(ctx, dbName)
 	if err != nil {
 		fmt.Println(err)
@@ -360,7 +360,7 @@ func WriteComment(db *sql.DB, fileName string) {
 	}
 	defer rows.Close()
 
-	fileName = files.ChangeExtention(fileName, "xml")
+	fileName = files.ChangeExtension(fileName, "xml")
 
 	dir := filepath.Dir(fileName)
 	base := filepath.Base(fileName)

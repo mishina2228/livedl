@@ -289,7 +289,7 @@ func WriteComment(db *sql.DB, fileName string, skipHb bool) {
 	}
 	defer rows.Close()
 
-	fileName = files.ChangeExtention(fileName, "xml")
+	fileName = files.ChangeExtension(fileName, "xml")
 
 	dir := filepath.Dir(fileName)
 	base := filepath.Base(fileName)

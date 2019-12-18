@@ -172,7 +172,7 @@ func (z *ZipMp4) OpenFFMpeg(ext string) {
 	if ext == "" {
 		ext = "mp4"
 	}
-	name := files.ChangeExtention(z.ZipName, ext)
+	name := files.ChangeExtension(z.ZipName, ext)
 	name, err := files.GetFileNameNext(name)
 	if err != nil {
 		fmt.Println(err)
@@ -452,7 +452,7 @@ func ExtractChunks(fileName string, skipHb bool) (done bool, err error) {
 	}
 	defer rows.Close()
 
-	dir := files.RemoveExtention(fileName)
+	dir := files.RemoveExtension(fileName)
 	if err = files.MkdirByFileName(dir + "/"); err != nil {
 		return
 	}
