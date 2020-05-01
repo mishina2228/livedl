@@ -44,7 +44,7 @@ func Open(name string) (flv *Flv, err error) {
 
 	stat, err := file.Stat()
 	if err != nil {
-
+		// FIXME: handle this error
 	}
 
 	// FLV header

@@ -367,7 +367,7 @@ func (hls *NicoHls) commentHandler(tag string, attr interface{}) (err error) {
 const (
 	OK = iota
 	INTERRUPT
-	MAIN_WS_ERROR
+	MAIN_WS_ERROR // TODO: use camelCase instead of snake_case
 	MAIN_DISCONNECT
 	MAIN_END_PROGRAM
 	MAIN_INVALID_STREAM_QUALITY
