@@ -19,7 +19,7 @@ func decodeU29(rdr *bytes.Reader) (res int, err error) {
 			val = num
 		} else {
 			flg = (num & 0x80) == 0x80
-			val = (num & 0x7f)
+			val = num & 0x7f
 		}
 
 		switch i {
@@ -181,9 +181,9 @@ func encodeU29(num int, buff *bytes.Buffer) (err error) {
 
 func encodeU28Flag(num int, flag bool, buff *bytes.Buffer) (err error) {
 	if flag {
-		err = encodeU29(((num << 1) | 1), buff)
+		err = encodeU29((num << 1) | 1, buff)
 	} else {
-		err = encodeU29((num << 1), buff)
+		err = encodeU29(num << 1, buff)
 	}
 	return
 }
