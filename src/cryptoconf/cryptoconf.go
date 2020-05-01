@@ -48,15 +48,15 @@ func Set(dataSet map[string]string, fileName, pass string) (err error) {
 	if err != nil {
 		return
 	}
-	ciphertext := aesgcm.Seal(nonce, nonce, plaintext, nil)
-	//fmt.Printf("%#v\n", ciphertext)
+	cipherText := aesgcm.Seal(nonce, nonce, plaintext, nil)
+	//fmt.Printf("%#v\n", cipherText)
 
 	file, err := os.Create(fileName)
 	if err != nil {
 		return
 	}
 	defer file.Close()
-	if _, err = file.Write(ciphertext); err != nil {
+	if _, err = file.Write(cipherText); err != nil {
 		return
 	}
 
@@ -82,9 +82,9 @@ func Load(file, pass string) (data map[string]interface{}, err error) {
 
 	nonceSize := aesgcm.NonceSize()
 
-	nonce, ciphertext := b[:nonceSize], b[nonceSize:]
+	nonce, cipherText := b[:nonceSize], b[nonceSize:]
 
-	plaintext, err := aesgcm.Open(nil, nonce, ciphertext, nil)
+	plaintext, err := aesgcm.Open(nil, nonce, cipherText, nil)
 	if err != nil {
 		err = fmt.Errorf("Password wrong for config: %s", file)
 		return

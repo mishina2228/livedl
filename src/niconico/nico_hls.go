@@ -636,7 +636,7 @@ func (hls *NicoHls) getwaybackkey(threadId string) (waybackkey string, neterr, e
 	}
 	return
 }
-func (hls *NicoHls) getTsCommentFromWhen() (res_from int, when float64) {
+func (hls *NicoHls) getTsCommentFromWhen() (resFrom int, when float64) {
 	return hls.dbGetFromWhen()
 }
 

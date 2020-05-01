@@ -256,16 +256,16 @@ func (hls *NicoHls) dbReplace(table string, data map[string]interface{}) {
 }
 
 // timeshift
-func (hls *NicoHls) dbGetFromWhen() (res_from int, when float64) {
+func (hls *NicoHls) dbGetFromWhen() (resFrom int, when float64) {
 	hls.dbMtx.Lock()
 	defer hls.dbMtx.Unlock()
 	var date2 int64
 	var no int
 
 	hls.db.QueryRow("SELECT date2, no FROM comment ORDER BY date2 ASC LIMIT 1").Scan(&date2, &no)
-	res_from = no
-	if res_from <= 0 {
-		res_from = 1
+	resFrom = no
+	if resFrom <= 0 {
+		resFrom = 1
 	}
 
 	if date2 == 0 {

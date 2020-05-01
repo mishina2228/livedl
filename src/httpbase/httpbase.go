@@ -124,12 +124,12 @@ func SetSkipVerify(skip bool) (err error) {
 	}
 	return
 }
-func SetProxy(rawurl string) (err error) {
+func SetProxy(rawUrl string) (err error) {
 	if !checkTransport() {
-		return fmt.Errorf("SetProxy(%#v): check failed", rawurl)
+		return fmt.Errorf("SetProxy(%#v): check failed", rawUrl)
 	}
 
-	u, err := url.Parse(rawurl)
+	u, err := url.Parse(rawUrl)
 	if err != nil {
 		return
 	}
