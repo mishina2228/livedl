@@ -46,13 +46,13 @@ func decodeString(rdr *bytes.Reader) (str string, err error) {
 		return
 	}
 	flag := (u29 & 1) != 0
-	len := u29 >> 1
+	length := u29 >> 1
 
 	if !flag {
 		// string reference table index
 		log.Fatalf("[FIXME] not implemented: UTF-8-vr = U29S-ref")
 	} else {
-		buf := make([]byte, len)
+		buf := make([]byte, length)
 		if _, err = io.ReadFull(rdr, buf); err != nil {
 			return
 		}

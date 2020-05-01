@@ -17,9 +17,9 @@ func encodeNumber(num float64, buff *bytes.Buffer) (err error) {
 	}
 
 	bits := math.Float64bits(num)
-	bytes := make([]byte, 8)
-	binary.BigEndian.PutUint64(bytes, bits)
-	if _, err = buff.Write(bytes); err != nil {
+	byteArray := make([]byte, 8)
+	binary.BigEndian.PutUint64(byteArray, bits)
+	if _, err = buff.Write(byteArray); err != nil {
 		return
 	}
 	return
@@ -176,9 +176,9 @@ func decodeString(rdr *bytes.Reader) (str string, err error) {
 	if _, err = io.ReadFull(rdr, buf); err != nil {
 		return
 	}
-	len := (int(buf[0]) << 8) | int(buf[1])
-	if len > 0 {
-		buf := make([]byte, len)
+	length := (int(buf[0]) << 8) | int(buf[1])
+	if length > 0 {
+		buf := make([]byte, length)
 		if _, err = io.ReadFull(rdr, buf); err != nil {
 			return
 		}
