@@ -15,12 +15,6 @@ func EncodeAmf0(data []interface{}, asEcmaArray bool) ([]byte, error) {
 	return amf0.Encode(data, asEcmaArray)
 }
 
-func Amf0EcmaArray(data map[string]interface{}) amf_t.AMF0EcmaArray {
-	return amf_t.AMF0EcmaArray{
-		Data: data,
-	}
-}
-
 // paddingHint: zero padded before AMF data
 func DecodeAmf0(data []byte, paddingHint ...bool) (res []interface{}, err error) {
 	rdr := bytes.NewReader(data)
